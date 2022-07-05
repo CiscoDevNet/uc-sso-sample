@@ -1,0 +1,34 @@
+<html>
+<script type="text/javascript">
+var ucHost = "ds-ucm105.cisco.com"; //UC resource hostname
+var redirectUrl = "https://app.example.com/ssocb.html"; //Final redirect URL page
+
+//Build the request URL	
+var requestUrl = 'https://' + ucHost + ':8443/ssosp/oauth/authorize?' + //Base URL
+	'scope=UnifiedCommunications:readwrite&' +                           
+	'response_type=token&' +
+	'redirect_uri=' + encodeURIComponent(redirectUrl)+'&' + //Final redirect URL
+	'client_id=C69908c4f345729af0a23cdfff1d255272de942193e7d39171ddd307bc488d7a1'; //Application client_id
+//Open a child window for user interaction
+var popup = (window.open('','','height=500,width=500,scrollbars=1'));
+popup.document.write('Authorizing...');
+//Start the SSO login sequence using the request URL
+popup.location = requestUrl;
+
+//Called from the child window by a script in the final redirect URL page
+function parentCallback(hash) {
+	//Parse the access_token value from the URL fragment string
+	var start,end;
+	start = hash.indexOf('#access_token')+14;
+	end = hash.indexOf('&');
+	//Update the input box with the token value
+	document.getElementsByName('Token')[0].value=hash.substring(start,end);
+}
+</script>
+  <head>
+	<title>SSO Demo</title>
+  </head>
+	<body>
+		SSO Token <input name="Token" readonly=true size=70/>
+	</body>
+</html>

@@ -1,0 +1,13 @@
+<html>
+	<head>
+		<title>Authorization Complete</title>
+	</head>
+	<body></body>
+	<script type="text/javascript">
+		//As soon as the page loads, make the callback to the parent window
+		window.onload = function(e) {
+			//The SSO token information is available in a URL fragment of the location
+			window.opener.parentCallback(location.hash);
+			window.close() };
+		</script>
+</html>
