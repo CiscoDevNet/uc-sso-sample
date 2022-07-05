@@ -1,0 +1,35 @@
+<html>
+<script type="text/javascript">
+
+function submitClick() {
+    var ssoToken=document.getElementsByName('ssoToken')[0].value;
+    var ucHost=document.getElementsByName('ucHost')[0].value;
+	
+	var xmlhttp=new XMLHttpRequest();  //Create XML request object
+	xmlhttp.open('GET','https://'+ucHost+'/vmrest/mailbox/folders/inbox/messages');  //CUC REST API to retrieve mailbox info
+	var token = document.getElementsByName('ssoToken')[0].value; //Get the SSO token the user has entered into the input field
+	xmlhttp.setRequestHeader("Authorization","Bearer "+token); //Add 'Authorization' header with 'Bearer' and token
+	
+	xmlhttp.onreadystatechange=function() {  //Handle completion event of the XML request
+		if (xmlhttp.readyState==4) {         //State is complete
+			if (xmlhttp.status==200) {       //Status is 200 OK
+				var xml=new XMLSerializer().serializeToString(xmlhttp.responseXML); //Extract the XML string from the response
+			document.getElementsByName("response")[0].value=xml; //Display the XML in the text area
+			}
+		}
+	}
+		
+	xmlhttp.send();	//Launch the XML request
+}
+</script>
+  <head>
+    <title>CUMI JavaScript SSO demo</title>
+  </head>
+  <body>
+    Enter SSO Token: <input name="ssoToken" size=60/><br>
+    Enter Unity Connection host name: <input name="ucHost"><br>
+    <button name="submitButton" type="button" onClick="submitClick()">Submit</button><br>
+    Response:<br>
+    <textarea name="response" rows="10" cols="115"></textarea>
+  </body>
+</html>
